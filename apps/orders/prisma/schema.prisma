@@ -5,21 +5,22 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output = "../../../node_modules/.prisma/client/orders"
+  provider      = "prisma-client-js"
+  output        = "../../../node_modules/.prisma/client/orders"
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:root@mysql:3306/orders"
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  price Int
-  client_id Int
-  created_at DateTime @default(now())
-  status OrderStatus
+  id         Int         @id @default(autoincrement())
+  price      Int
+  client_id  Int
+  created_at DateTime    @default(now())
+  status     OrderStatus
 }
 
 enum OrderStatus {

@@ -4,9 +4,14 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+     - "3000:3000"
     volumes:
-      - .:/home/node/app
+     - .:/home/node/app
+    environment:
+     - _REMOTE_USER_HOME=/home/NODE
+     - _REMOTE_USER_ID=1000
+     - _REMOTE_GROUP_ID=1000
+     - _REMOTE_USER_NAME=node
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     hostname: zookeeper
@@ -16,7 +21,6 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-
   broker:
     image: confluentinc/cp-server:7.5.0
     hostname: broker
@@ -190,8 +194,10 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: root
       MYSQL_USER: test
       MYSQL_PASSWORD: test
     volumes:
       - ./.docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+        - default

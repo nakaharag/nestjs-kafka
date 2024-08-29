@@ -9,7 +9,10 @@
 		"../docker-compose.yaml",
 		"docker-compose.yml"
 	],
-
+	"containerEnv": {
+		"_REMOTE_USER": "node",
+		"_REMOTE_USER_HOME": "/home/node"
+	},
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
 	"service": "app",
@@ -28,7 +31,7 @@
 				"prisma.prisma"
 			]
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
