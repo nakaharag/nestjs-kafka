@@ -1,9 +1,9 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma/prisma.service';
 import { OrderDTO } from './order.dto';
 import { OrderStatus } from '.prisma/client/orders';
-import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { ClientKafka } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class OrdersService {
@@ -18,13 +18,21 @@ export class OrdersService {
   }
 
   async create(data: OrderDTO) {
-    const order = this.prismaService.order.create({
+    const order = await this.prismaService.order.create({
       data: {
         ...data,
         status: OrderStatus.PENDING,
       },
     });
-    await lastValueFrom(this.kafkaClient.emit('order', order));
+    await lastValueFrom(this.kafkaClient.emit('orders', order));
     return order;
+  }
+
+  complete(id: number, status: OrderStatus) {
+    console.log(id, status);
+    return this.prismaService.order.update({
+      where: { id },
+      data: { status },
+    });
   }
 }
